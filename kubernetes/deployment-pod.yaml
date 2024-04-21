@@ -1,0 +1,48 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name:  hello-world
+  labels:
+    name:  hello-world
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hello-world
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name:  hello-world
+    spec:
+      containers:
+      - image:  khazim/hello-world:2.0
+        name:  hello-world
+        resources: {}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 90
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 30
+          timeoutSeconds: 10    
+        ports:
+        - containerPort:  3000
+          name:  hello-world
+        volumeMounts:
+        - mountPath: /data
+          name: data
+      volumes:
+        - name: data
+          emptyDir: {}
+      restartPolicy: Always
+      

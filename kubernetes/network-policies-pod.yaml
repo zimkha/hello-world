@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app: hello-world # replace with your pod's label
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 3000 
+    # - from:
+    #   - podSelector:
+    #       matchLabels:
+    #         access: "true"  # replace with your desired label
+    #   ports:
+    #     - protocol: TCP
+    #       port: 3000  # pod's port
